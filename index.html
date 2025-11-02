@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIG SPBU - Sistem Informasi Geografis SPBU Kota Palembang</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-warning p-3 shadow-sm border-bottom ">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+          <div class="text-danger">
+            <i class="fas fa-gas-pump fa-2x"></i>
+          </div>
+          <div>
+            <span class="h5 fw-medium m-0">SIG SPBU Palembang</span>
+          </div>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto fw-bold">
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="#deskripsi">Deskripsi</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="#lokasi">Lokasi</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="#tentang">Tentang</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section id="deskripsi" class="bg-light py-5">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-md-6">
+            <h2 class="h2 fw-medium">
+              SIG SPBU Palembang atau Sistem Informasi Geografis Pom Bensin
+            </h2>
+            <p class="lead text-muted">
+              Website ini merupakan sistem informasi geografis yang dirancang
+              khusus untuk membantu masyarakat Palembang dalam menemukan lokasi
+              SPBU terdekat.
+            </p>
+            <p>
+              Fitur utama meliputi peta interaktif, pencarian berdasarkan lokasi
+              pengguna, navigasi rute terpendek, dan informasi detail setiap
+              SPBU.
+            </p>
+            <p>
+              Dengan teknologi geolokasi modern, pengguna dapat langsung melihat
+              SPBU terdekat dan mendapatkan petunjuk arah secara real-time.
+            </p>
+          </div>
+          <div class="col-md-6">
+            <img
+              src="images/spbu.jpg"
+              class="img-fluid rounded"
+              alt="Gambar Ilustrasi SPBU"
+              style="min-height: 280px; object-fit: cover; width: 100%"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="loading" class="loading-screen">
+      <div class="loading-content">
+        <i class="fas fa-gas-pump fa-3x"></i>
+        <h2>Memuat Peta...</h2>
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <main class="container my-4" id="lokasi">
+      <div
+        class="alert alert-secondary d-flex align-items-center gap-2"
+        role="alert"
+        id="locationStatus"
+      >
+        <div class="status-content d-flex align-items-center gap-2">
+          <i class="fas fa-location-dot"></i>
+          <span id="statusText">Mengakses lokasi Anda...</span>
+        </div>
+      </div>
+
+      <div
+        class="map-container rounded shadow-sm overflow-hidden position-relative"
+      >
+        <div id="map" class="map"></div>
+        <div class="map-controls">
+          <button id="myLocationBtn" class="control-btn" title="Lokasi Saya">
+            <i class="fas fa-crosshairs"></i>
+          </button>
+          <button
+            id="refreshBtn"
+            class="control-btn"
+            title="Refresh Pom Bensin"
+          >
+            <i class="fas fa-refresh"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card shadow-sm my-4" id="infoPanel">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h3 id="stationName" class="h5 m-0">Pilih Pom Bensin</h3>
+          <button id="closeInfo" class="btn-close" title="Tutup"></button>
+        </div>
+        <div class="card-body" id="infoContent">
+          <p class="text-muted fst-italic text-center">
+            Klik marker pom bensin di peta untuk melihat informasi detail
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-dark text-light pt-5 pb-3 mt-5" id="tentang">
+      <div class="container">
+        <div class="row g-4 mb-4">
+          <div class="col-md-4">
+            <h3 class="h5 fw-medium d-flex align-items-center gap-2">
+              <i class="fas fa-phone text-warning"></i> Kontak Pertamina
+            </h3>
+            <div class="text-white-50">
+              <p class="mb-1"><strong>Call Center:</strong> 135</p>
+              <p class="mb-1"><strong>WhatsApp:</strong> +62 811-1135-135</p>
+              <p class="mb-1">
+                <strong>Email:</strong> contact135@pertamina.com
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <h3 class="h5 fw-medium d-flex align-items-center gap-2">
+              <i class="fas fa-share-alt text-warning"></i> Media Sosial
+            </h3>
+            <div class="d-flex flex-column gap-2">
+              <a
+                href="https://instagram.com/pertamina"
+                target="_blank"
+                class="text-white-50 text-decoration-none d-flex align-items-center gap-2"
+              >
+                <i class="fab fa-instagram"></i> Instagram
+              </a>
+              <a
+                href="https://twitter.com/pertamina"
+                target="_blank"
+                class="text-white-50 text-decoration-none d-flex align-items-center gap-2"
+              >
+                <i class="fab fa-twitter"></i> Twitter
+              </a>
+              <a
+                href="https://line.me/ti/p/@pertamina"
+                target="_blank"
+                class="text-white-50 text-decoration-none d-flex align-items-center gap-2"
+              >
+                <i class="fab fa-line"></i> Line
+              </a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <h3 class="h5 fw-medium d-flex align-items-center gap-2">
+              <i class="fas fa-info-circle text-warning"></i> Tentang SiLok
+            </h3>
+            <p class="text-white-50">
+              Sistem informasi untuk menemukan pom bensin terdekat di Palembang
+              dengan fitur navigasi real-time.
+            </p>
+          </div>
+        </div>
+        <div class="footer-bottom text-center border-top border-secondary pt-3">
+          <p class="text-white-50 small">
+            &copy; 2024 SiLok - Sistem Informasi Lokasi Pom Bensin Palembang
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="app-leaflet.js"></script>
+    <script>
+      // Initialize map when page loads
+      document.addEventListener("DOMContentLoaded", initMap);
+    </script>
+  </body>
+</html>
