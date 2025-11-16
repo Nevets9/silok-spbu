@@ -28,7 +28,7 @@
     />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-warning p-3 shadow-sm border-bottom ">
+    <nav class="navbar navbar-expand-lg bg-warning p-3 shadow-sm border-bottom">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="#">
           <div class="text-danger">
@@ -52,7 +52,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto fw-bold">
+          <ul class="navbar-nav ms-auto fw-bold d-flex align-items-center">
             <li class="nav-item">
               <a class="nav-link text-dark" href="#deskripsi">Deskripsi</a>
             </li>
@@ -61,6 +61,27 @@
             </li>
             <li class="nav-item">
               <a class="nav-link text-dark" href="#tentang">Tentang</a>
+            </li>
+
+            <li class="nav-item" id="createBtn" style="display: none">
+              <button class="btn btn-sm btn-success ms-2">
+                <i class="fas fa-plus"></i> Tambah SPBU
+              </button>
+            </li>
+
+            <li class="nav-item" id="loginBtnLi">
+              <button
+                class="btn btn-sm btn-danger ms-2"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+              >
+                <i class="fas fa-sign-in-alt"></i> Login Admin
+              </button>
+            </li>
+            <li class="nav-item" id="logoutBtnLi" style="display: none">
+              <button id="logoutBtn" class="btn btn-sm btn-secondary ms-2">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
             </li>
           </ul>
         </div>
@@ -154,6 +175,137 @@
       </div>
     </main>
 
+    <div class="modal fade" id="loginModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Login Admin</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="loginEmail"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="loginPassword"
+                  required
+                />
+              </div>
+              <div
+                id="loginError"
+                class="alert alert-danger"
+                style="display: none"
+              ></div>
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="stationModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="stationModalTitle">Form SPBU</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="stationForm">
+              <input type="hidden" id="stationId" />
+
+              <div class="mb-3">
+                <label for="stationName" class="form-label">Nama SPBU</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="stationNameInput"
+                  required
+                />
+              </div>
+
+              <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                  <label for="stationLat" class="form-label">Latitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    class="form-control"
+                    id="stationLat"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="stationLng" class="form-label">Longitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    class="form-control"
+                    id="stationLng"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="stationAddress" class="form-label">Alamat</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="stationAddress"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="stationMapsUrl" class="form-label"
+                  >URL Google Maps (Embed)</label
+                >
+                <input type="url" class="form-control" id="stationMapsUrl" />
+              </div>
+              <div class="mb-3">
+                <label for="stationFacilities" class="form-label"
+                  >Fasilitas (pisahkan dengan koma, cth: ATM,Toilet)</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="stationFacilities"
+                />
+              </div>
+
+              <div
+                id="stationError"
+                class="alert alert-danger"
+                style="display: none"
+              ></div>
+              <button type="submit" class="btn btn-success w-100">
+                Simpan Data
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <footer class="bg-dark text-light pt-5 pb-3 mt-5" id="tentang">
       <div class="container">
         <div class="row g-4 mb-4">
@@ -223,10 +375,6 @@
       crossorigin="anonymous"
     ></script>
 
-    <script src="app-leaflet.js"></script>
-    <script>
-      // Initialize map when page loads
-      document.addEventListener("DOMContentLoaded", initMap);
-    </script>
+    <script type="module" src="app-leaflet.js"></script>
   </body>
 </html>

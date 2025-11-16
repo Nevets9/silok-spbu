@@ -14,13 +14,14 @@ datasource db {
 }
 
 model GasStation {
-  id         Int    @id
+  id         Int    @id @default(autoincrement())
   name       String
   lat        Float
   lng        Float
   address    String
   brand      String
   facilities Json
+  mapsUrl     String
 }
 
 model User {
